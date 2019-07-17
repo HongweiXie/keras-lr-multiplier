@@ -57,13 +57,13 @@ class LRMultiplier(optimizers.Optimizer):
                 lr = lr * multiplier(K.cast(self.optimizer.iterations, K.floatx()))
             elif multiplier != 1.0:
                 lr = lr * multiplier
-            self.optimizer.lr = lr
+            self.optimizer.lr.assign(lr)
             with K.name_scope('Group_{}'.format(i)):
                 self.updates += self.optimizer.get_updates(loss, params)
             for w in self.optimizer.weights:
                 if w not in self.weights:
                     self.weights.append(w)
-        self.optimizer.lr = origin_lr
+        self.optimizer.lr.assign(origin_lr)
 
         return self.updates
 
